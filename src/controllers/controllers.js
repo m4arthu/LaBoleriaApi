@@ -11,6 +11,7 @@ export const postCakes = async (req, res) => {
         res.sendStatus(409)
         return
        }
+       console.log(e)
        res.sendStatus(500)
     }
 }
