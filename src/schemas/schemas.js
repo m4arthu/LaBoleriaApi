@@ -17,5 +17,5 @@ export const orderSchema = Joi.object({
     cakeId: Joi.number().required().integer(),
      clientId : Joi.number().required().integer(),
      quantity: Joi.number().required().integer(),
-     totalPrice: Joi.number().required().integer(), 
+     totalPrice: Joi.number().positive(), 
 })

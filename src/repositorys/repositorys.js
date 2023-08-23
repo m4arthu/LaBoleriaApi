@@ -13,8 +13,8 @@ export const postOrderQuery = async (data) => {
 }
 
 export const getOrderByDate = async (data) => {
-    return await db.query(`SELECT json_agg(cakes.*) AS cake, 
-    json_agg(clients.*) AS client,
+    return await db.query(`SELECT  row_to_json(cakes.*) AS cake, 
+    row_to_json(clients.*) AS client,
     orders.id AS "orderId",
     orders."createdAt",
     orders.quantity,
@@ -23,13 +23,13 @@ export const getOrderByDate = async (data) => {
     JOIN cakes ON cakes.id = orders."cakeId"
     JOIN clients ON clients.id = orders."clientId"
     WHERE date("createdAt") = $1
-    GROUP BY orders.id,cakes.price;
+    GROUP BY orders.id,cakes.price,clients.id,cakes.*;
     `, data)
 }
 
 export const getOrderQuery = async () => {
-    return await db.query(`SELECT json_agg(cakes.*) AS cake, 
-    json_agg(clients.*) AS client,
+    return await db.query(`SELECT  row_to_json(cakes.*) AS cake, 
+     row_to_json(clients.*) AS client,
     orders.id AS "orderId",
     orders."createdAt",
     orders.quantity,
@@ -37,13 +37,13 @@ export const getOrderQuery = async () => {
     FROM orders
     JOIN cakes ON cakes.id = orders."cakeId"
     JOIN clients ON clients.id = orders."clientId"
-    GROUP BY orders.id,cakes.price;
+    GROUP BY orders.id,cakes.price,clients.id,cakes.*;
     `)
 }
 
 export const getOrderByIdQuery = async (data) => {
-    return await db.query(`SELECT json_agg(clients.*) AS client,
-    json_agg(cakes.*) AS cake, 
+    return await db.query(`SELECT row_to_json(clients.*) AS client,
+    row_to_json(cakes.*) AS cake, 
     orders.id AS "orderId",
     orders."createdAt",
     orders.quantity,
@@ -52,7 +52,7 @@ export const getOrderByIdQuery = async (data) => {
     JOIN cakes ON cakes.id = orders."cakeId"
     JOIN clients ON clients.id = orders."clientId"
     WHERE orders.id = $1
-    GROUP BY orders.id, orders."createdAt", orders.quantity, orders."totalPrice,cakes.price";
+    GROUP BY orders.id,cakes.price,clients.id,cakes.*;
     `,data)
 
 }
